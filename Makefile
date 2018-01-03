@@ -9,6 +9,9 @@
 # Package name and version number
 PACKAGE = scv-2.0.1
 
+# SystemC Installation
+SYSTEMC = /opt/systemc/systemc-2.3.2
+
 
 # Select between 32-bit or 64-bit machine (Default 64-bit)
 ifeq ($(M),)
@@ -19,12 +22,6 @@ endif
 # Set number of simultaneous jobs (Default 4)
 ifeq ($(J),)
 	J = 4
-endif
-
-
-# SystemC Installation
-ifeq ($(SYSTEMC),)
-	SYSTEMC = /opt/systemc/systemc-2.3.2
 endif
 
 
@@ -48,19 +45,19 @@ endif
 
 all:
 	@echo ""
-	@echo "## First time"
+	@echo "## Get the source"
 	@echo "make download"
+	@echo ""
+	@echo "## Build"
 	@echo "make prepare"
 	@echo "make configure [M=...]"
 	@echo "make compile [J=...]"
+	@echo ""
+	@echo "## Install"
 	@echo "sudo make install"
 	@echo ""
-	@echo "## Any other time"
+	@echo "## Cleanup"
 	@echo "make clean"
-	@echo "make prepare"
-	@echo "make configure [M=...]"
-	@echo "make compile [J=...]"
-	@echo "sudo make install"
 	@echo ""
 
 
