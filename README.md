@@ -19,11 +19,11 @@ cd ed_scv
 
 # Edit the Makefile for selecting the SCV source version.
 vim Makefile
-PACKAGE = scv-2.0.1
+PACKAGE_VERSION = 2.0.1
 
 # Edit the Makefile for selecting the SystemC installation.
 vim Makefile
-SYSTEMC = /opt/systemc/systemc-2.3.2
+SYSTEMC = /opt/systemc/$(ARCH)/systemc-2.3.2
 
 # Download SCV source package into src/ directory.
 make download
@@ -35,16 +35,14 @@ Build
 # Unpack source code into build/ directory.
 make prepare
 
-# Configure source code for 64-bit compile (Default: M=64).
-make configure
-make configure M=64
-
-# Configure source code for 32-bit compile.
-make configure M=32
+# Configure source code.
+# NOTE: We need to use sudo here because configure tries to create the $(PREFIX) directory!
+sudo make configure
 
 # Compile source code using 4 simultaneous jobs (Default: J=4).
-make compile
-make compile J=4
+# NOTE: We need to use sudo here because it was used for configure!
+sudo make compile
+sudo make compile J=4
 ```
 
 Install
@@ -55,23 +53,29 @@ sudo make install
 ```
 
 The build products are installed in the following locations:
+
+FIXME: Why this particular directory structure ...
 ```bash
 opt
 └── systemc
-    └── scv-2.0.1
-        ├── docs            # Documentation.
-        │   ├── ...
-        │
-        ├── include         # Include files.
-        │   ├── scv.h
-        │       ...
-        ├── lib-linux64     # 64-bit libraries for Linux
-        │   ├── libscv.a
-        │       ...
-        ├── lib-linux       # 32-bit libraries for Linux
-        │   ├── libscv.a
-        │       ...
+    ├── linux_x86_64            # 64-bit binaries and libraries for Linux
+    │   └── scv-2.0.1
+    │       ├── docs            # Documentation.
+    │       │   ├── ...
+    │       │
+    │       ├── include         # Include directory.
+    │       │   ├── scv.h
+    │       │       ...
+    │       ├── lib-linux64     # Library directory.
+    │           ├── libscv.a
+    │               ...
+    └── linux_x86               # 32-bit binaries and libraries for Linux
+        └── scv-2.0.1
+            ...
 ```
 
 Notes
 =====
+
+This has been testes with the following Linux distributions and compilers:
+* `Fedora-27 (64-bit)` and `gcc-7.2.1`
