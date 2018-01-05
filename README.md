@@ -2,17 +2,17 @@
 Compile and Install of the SystemC Verification Library
 =======================================================
 
-This repository contains make file for easy compile and install of the SystemC Verification Library.
+This repository contains make file for easy compile and install of the [SystemC Verification Library](http://www.accellera.org/downloads/standards/systemc).
 
-Get tool and source code
-========================
+Get Source Code
+===============
 
 ## ed_scv
 ```bash
 git clone https://github.com/embed-dsp/ed_scv.git
 ```
 
-## SCV Source
+## SCV
 ```bash
 # Enter the ed_scv directory.
 cd ed_scv
@@ -36,7 +36,7 @@ Build
 make prepare
 
 # Configure source code.
-# NOTE: We need to use sudo here because configure tries to create the $(PREFIX) directory!
+# NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
 sudo make configure
 
 # Compile source code using 4 simultaneous jobs (Default: J=4).
