@@ -7,21 +7,32 @@
 # $Revision: $
 
 
-CC = /usr/bin/gcc
-CXX = /usr/bin/g++
-
 # Package.
 PACKAGE_NAME = scv
 PACKAGE_VERSION = 2.0.1
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
+# Build for 32-bit or 64-bit (Default)
+ifeq ($(M),)
+	M = 64
+endif
+
+ifeq ($(M),64)
+	CONFIGURE_FLAGS =
+else
+	CONFIGURE_FLAGS = --host=i686-linux-gnu
+endif
+
+CC = /usr/bin/gcc
+CXX = /usr/bin/g++
+
 # Architecture.
-ARCH = $(shell ./bin/get_arch.sh)
+ARCH = $(shell ./bin/get_arch.sh $(M))
 
 # SystemC Installation.
 SYSTEMC = /opt/systemc/$(ARCH)/systemc-2.3.2
 
-# Installation.
+# Installation directories.
 PREFIX = /opt/systemc/$(ARCH)/$(PACKAGE)
 # PREFIX = /opt/systemc/$(PACKAGE)
 # EXEC_PREFIX = $(PREFIX)/$(ARCH)
@@ -39,11 +50,11 @@ all:
 	@echo ""
 	@echo "## Build"
 	@echo "make prepare"
-	@echo "make configure"
-	@echo "make compile [J=...]"
+	@echo "sudo make configure [M=...]"
+	@echo "sudo make compile [J=...]"
 	@echo ""
 	@echo "## Install"
-	@echo "sudo make install"
+	@echo "sudo make install [M=...]"
 	@echo ""
 	@echo "## Cleanup"
 	@echo "make clean"
@@ -64,7 +75,7 @@ prepare:
 
 .PHONY: configure
 configure:
-	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) --prefix=$(PREFIX) --disable-shared --with-systemc=$(SYSTEMC)
+	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) --prefix=$(PREFIX) --disable-shared --with-systemc=$(SYSTEMC) $(CONFIGURE_FLAGS)
 
 
 .PHONY: compile

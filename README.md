@@ -35,9 +35,14 @@ Build
 # Unpack source code into build/ directory.
 make prepare
 
-# Configure source code.
+# Configure source code for 64-bit compile (Default: M=64).
 # NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
 sudo make configure
+sudo make configure M=64
+
+# Configure source code for 32-bit compile.
+# NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
+sudo make configure M=32
 
 # Compile source code using 4 simultaneous jobs (Default: J=4).
 # NOTE: We need to use sudo here because it was used for configure!
@@ -48,29 +53,33 @@ sudo make compile J=4
 Install
 =======
 ```bash
-# Install build products.
+# Install 64-bit build products (Default: M=64).
 sudo make install
+sudo make install M=64
+
+# Install 32-bit build products.
+sudo make install M=32
 ```
 
 The build products are installed in the following locations:
 
 FIXME: Why this particular directory structure ...
 ```bash
-opt
-└── systemc
-    ├── linux_x86_64            # 64-bit binaries and libraries for Linux
-    │   └── scv-2.0.1
-    │       ├── docs            # Documentation.
+opt/
+└── systemc/
+    ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
+    │   └── scv-2.0.1/
+    │       ├── docs/           # Documentation.
     │       │   ├── ...
     │       │
-    │       ├── include         # Include directory.
+    │       ├── include/        # Include directory.
     │       │   ├── scv.h
     │       │       ...
-    │       ├── lib-linux64     # Library directory.
+    │       ├── lib-linux64/    # Library directory.
     │           ├── libscv.a
     │               ...
-    └── linux_x86               # 32-bit binaries and libraries for Linux
-        └── scv-2.0.1
+    └── linux_x86/              # 32-bit binaries and libraries for Linux
+        └── scv-2.0.1/
             ...
 ```
 
