@@ -12,35 +12,73 @@ PACKAGE_NAME = scv
 PACKAGE_VERSION = 2.0.1
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
+SYSTEMC_VERSION = 2.3.2
+
 # Build for 32-bit or 64-bit (Default)
 ifeq ($(M),)
 	M = 64
 endif
 
-ifeq ($(M),64)
-	CONFIGURE_FLAGS =
-else
-	CONFIGURE_FLAGS = --host=i686-linux-gnu
-endif
-
-CC = /usr/bin/gcc
-CXX = /usr/bin/g++
-
-# Architecture.
-ARCH = $(shell ./bin/get_arch.sh $(M))
-
-# SystemC Installation.
-SYSTEMC = /opt/systemc/$(ARCH)/systemc-2.3.2
-
-# Installation directories.
-PREFIX = /opt/systemc/$(ARCH)/$(PACKAGE)
-# PREFIX = /opt/systemc/$(PACKAGE)
-# EXEC_PREFIX = $(PREFIX)/$(ARCH)
-
 # Set number of simultaneous jobs (Default 4)
 ifeq ($(J),)
 	J = 4
 endif
+
+# Kernel.
+KERN = $(shell ./bin/get_kernel.sh)
+
+# Machine.
+MACH = $(shell ./bin/get_machine.sh $(M))
+
+# Architecture.
+ARCH = $(KERN)_$(MACH)
+
+# ...
+CONFIGURE_FLAGS =
+
+# Linux specifics.
+ifeq ($(KERN),linux)
+	# FIXME: Linux: x86 (32-bit) application running on x86_64 (64-bit) kernel
+	ifeq ($(M),32)
+		CONFIGURE_FLAGS += --host=i686-linux-gnu
+	endif
+	# Compiler.
+	CC = /usr/bin/gcc
+	CXX = /usr/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /opt
+endif
+
+# Cygwin specifics.
+ifeq ($(KERN),cygwin)
+	# Compiler.
+	CC = /usr/bin/gcc
+	CXX = /usr/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /cygdrive/c/opt
+endif
+
+# MinGW specifics.
+ifeq ($(KERN),mingw32)
+	# Compiler.
+	CC = /mingw/bin/gcc
+	CXX = /mingw/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+# MinGW-W64 specifics.
+ifeq ($(KERN),mingw64)
+	# Compiler.
+	CC = /mingw64/bin/gcc
+	CXX = /mingw64/bin/g++
+	# Installation directory.
+	INSTALL_DIR = /c/opt
+endif
+
+SYSTEMC = $(INSTALL_DIR)/systemc/$(ARCH)/systemc-$(SYSTEMC_VERSION)
+PREFIX = $(INSTALL_DIR)/systemc/$(ARCH)/$(PACKAGE)
+# EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
 
 all:
@@ -90,4 +128,10 @@ install:
 
 .PHONY: clean
 clean:
-	-rm -rf build
+	# -rm -rf build
+	cd build/$(PACKAGE) && make clean
+
+
+.PHONY: distclean
+distclean:
+	cd build/$(PACKAGE) && make distclean
