@@ -1,8 +1,14 @@
 
 # Compile and Install of the SystemC Verification Library (SCV)
 
-This repository contains make file for easy compile and install of the [SystemC Verification Library](http://www.accellera.org/downloads/standards/systemc).
+This repository contains a **make** file for easy compile and install of the [SystemC Verification Library](http://www.accellera.org/downloads/standards/systemc).
 
+This **make** file can build the GTKWave tool on the following systems:
+* Linux
+* Windows
+    * [MSYS2](https://www.msys2.org)/mingw64
+    * [MSYS2](https://www.msys2.org)/mingw32
+    * **FIXME**: [Cygwin](https://www.cygwin.com)
 
 # Get Source Code
 
@@ -41,20 +47,22 @@ make prepare
 ```
 
 ```bash
-# Configure source code for 64-bit compile (Default: M=64).
+# Configure source code.
 # NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
 sudo make configure
-sudo make configure M=64
 
-# Configure source code for 32-bit compile.
+# Configure source code for 32-bit compile on a 64-bit system.
 # NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
 sudo make configure M=32
 ```
 
 ```bash
-# Compile source code using 4 simultaneous jobs (Default: J=4).
+# Compile source code using 4 simultaneous jobs (Default).
 # NOTE: We need to use sudo here because it was used for configure!
 sudo make compile
+
+# Compile source code using 2 simultaneous jobs.
+# NOTE: We need to use sudo here because it was used for configure!
 sudo make compile J=4
 ```
 
@@ -62,11 +70,12 @@ sudo make compile J=4
 # Install
 
 ```bash
-# Install 64-bit build products (Default: M=64).
+# Install build products.
+# FIXME: sudo
 sudo make install
-sudo make install M=64
 
 # Install 32-bit build products.
+# FIXME: sudo
 sudo make install M=32
 ```
 
@@ -76,6 +85,7 @@ The build products are therefore installed in the following locations in order
 to allow separate installation for different architectures and simple 
 interoperability with the SystemC package:
 
+FIXME: linux, arm, ...
 ```bash
 opt/
 └── systemc/
@@ -95,8 +105,17 @@ opt/
             ...
 ```
 
+FIXME: windows 64-bit, mingw32, mingw64
 
-# Notes
+
+# Tested System Configurations
+
+System  | M=                | M=32  
+--------|-------------------|-------------------
+linux   | Fedora-28 64-bit  | Fedora-28 64-bit
+mingw64 | Windows-10 64-bit |
+mingw32 | Windows-10 64-bit |
+cygwin  | **FIXME**         |
 
 This has been testes with the following Linux distributions and compilers:
 * `Fedora-27 (64-bit)`
