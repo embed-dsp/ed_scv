@@ -16,6 +16,8 @@ PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
 SYSTEMC_VERSION = 2.3.2
 
+# ==============================================================================
+
 # Set number of simultaneous jobs (Default 4)
 ifeq ($(J),)
 	J = 4
