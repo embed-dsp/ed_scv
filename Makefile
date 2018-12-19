@@ -14,7 +14,7 @@ PACKAGE_VERSION = 2.0.1
 
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
-SYSTEMC_VERSION = 2.3.2
+SYSTEMC_VERSION = 2.3.3
 
 # ==============================================================================
 
