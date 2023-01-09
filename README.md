@@ -24,13 +24,13 @@ git clone https://github.com/embed-dsp/ed_scv.git
 # Enter the ed_scv directory.
 cd ed_scv
 
+# Edit the Makefile for selecting the SystemC version.
+vim Makefile
+SYSTEMC_VERSION = 2.3.3
+
 # Edit the Makefile for selecting the SCV source version.
 vim Makefile
 PACKAGE_VERSION = 2.0.1
-
-# Edit the Makefile for selecting the SystemC installation.
-vim Makefile
-SYSTEMC = /opt/systemc/$(ARCH)/systemc-2.3.2
 ```
 
 ```bash
@@ -71,11 +71,9 @@ sudo make compile J=4
 
 ```bash
 # Install build products.
-# FIXME: sudo
 sudo make install
 
 # Install 32-bit build products.
-# FIXME: sudo
 sudo make install M=32
 ```
 
@@ -85,12 +83,11 @@ The build products are therefore installed in the following locations in order
 to allow separate installation for different architectures and simple 
 interoperability with the SystemC package:
 
-FIXME: linux, arm, ...
 ```bash
 opt/
 └── systemc/
     ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
-    │   └── scv-2.0.1/
+    │   └── scv-2.0.1-2.3.3/
     │       ├── docs/           # Documentation.
     │       │   ├── ...
     │       │
@@ -101,23 +98,20 @@ opt/
     │           ├── libscv.a
     │               ...
     └── linux_x86/              # 32-bit binaries and libraries for Linux
-        └── scv-2.0.1/
+        └── scv-2.0.1-2.3.3/
             ...
 ```
-
-FIXME: windows 64-bit, mingw32, mingw64
 
 
 # Tested System Configurations
 
 System  | M=                | M=32  
 --------|-------------------|-------------------
-linux   | Fedora-28 64-bit  | Fedora-28 64-bit
-mingw64 | Windows-10 64-bit |
-mingw32 | Windows-10 64-bit |
+linux   | Fedora-37 64-bit  | Fedora-37 64-bit
+mingw64 | **FIXME**         |
+mingw32 | **FIXME**         |
 cygwin  | **FIXME**         |
 
 This has been testes with the following Linux distributions and compilers:
-* `Fedora-27 (64-bit)`
-    * `gcc-7.2.1`
-    * `gcc-7.3.1`
+* `Fedora-37 (64-bit)`
+    * `gcc-12.2.1`
