@@ -3,12 +3,11 @@
 
 This repository contains a **make** file for easy compile and install of the [SystemC Verification Library](http://www.accellera.org/downloads/standards/systemc).
 
-This **make** file can build the GTKWave tool on the following systems:
+This **make** file can build the SCV library on the following systems:
 * Linux
 * Windows
     * [MSYS2](https://www.msys2.org)/mingw64
     * [MSYS2](https://www.msys2.org)/mingw32
-    * **FIXME**: [Cygwin](https://www.cygwin.com)
 
 # Get Source Code
 
@@ -23,14 +22,16 @@ git clone https://github.com/embed-dsp/ed_scv.git
 ```bash
 # Enter the ed_scv directory.
 cd ed_scv
+```
+
+```bash
+# Edit the Makefile for selecting the SCV version.
+vim Makefile
+PACKAGE_VERSION = 2.0.1
 
 # Edit the Makefile for selecting the SystemC version.
 vim Makefile
 SYSTEMC_VERSION = 2.3.3
-
-# Edit the Makefile for selecting the SCV source version.
-vim Makefile
-PACKAGE_VERSION = 2.0.1
 ```
 
 ```bash
@@ -87,7 +88,7 @@ interoperability with the SystemC package:
 opt/
 └── systemc/
     ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
-    │   └── scv-2.0.1-2.3.3/
+    │   └── scv-2.0.1/
     │       ├── docs/           # Documentation.
     │       │   ├── ...
     │       │
@@ -98,7 +99,7 @@ opt/
     │           ├── libscv.a
     │               ...
     └── linux_x86/              # 32-bit binaries and libraries for Linux
-        └── scv-2.0.1-2.3.3/
+        └── scv-2.0.1/
             ...
 ```
 
@@ -107,10 +108,9 @@ opt/
 
 System  | M=                | M=32  
 --------|-------------------|-------------------
-linux   | Fedora-37 64-bit  | Fedora-37 64-bit
-mingw64 | **FIXME**         |
+linux   | Fedora-37 64-bit  | 
+mingw64 | Windows-11 64-bit |
 mingw32 | **FIXME**         |
-cygwin  | **FIXME**         |
 
 This has been testes with the following Linux distributions and compilers:
 * `Fedora-37 (64-bit)`
