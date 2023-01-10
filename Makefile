@@ -3,13 +3,13 @@
 # Author: Gudmundur Bogason <gb@embed-dsp.com>
 
 
-SYSTEMC_VERSION = 2.3.3
-
 PACKAGE_NAME = scv
 
 PACKAGE_VERSION = 2.0.1
 
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
+
+SYSTEMC_VERSION = 2.3.3
 
 # ==============================================================================
 
@@ -31,9 +31,6 @@ endif
 # Determine machine.
 MACHINE = $(shell uname -m)
 
-# Architecture.
-ARCH = $(SYSTEM)_$(MACHINE)
-
 # ==============================================================================
 
 # Set number of simultaneous jobs (Default 4)
@@ -51,9 +48,12 @@ ifeq ($(SYSTEM),linux)
 		MACHINE = "x86"
 		CONFIGURE_FLAGS += --host=i686-linux-gnu
 	endif
+
 	# Compiler.
 	CC = /usr/bin/gcc
-	CXX = /usr/bin/g++
+	CXX = "/usr/bin/g++ -std=gnu++14"
+	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+
 	# Installation directory.
 	INSTALL_DIR = /opt
 endif
@@ -62,7 +62,9 @@ endif
 ifeq ($(SYSTEM),mingw32)
 	# Compiler.
 	CC = /mingw32/bin/gcc
-	CXX = /mingw32/bin/g++
+	CXX = "/mingw32/bin/g++ -std=gnu++14"
+	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
@@ -71,24 +73,29 @@ endif
 ifeq ($(SYSTEM),mingw64)
 	# Compiler.
 	CC = /mingw64/bin/gcc
-	CXX = /mingw64/bin/g++
+	CXX = "/mingw64/bin/g++ -std=gnu++14"
+	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
 
 # Configuration for cygwin system.
-ifeq ($(SYSTEM),cygwin)
-	# Compiler.
-	CC = /usr/bin/gcc
-	CXX = /usr/bin/g++
-	# Installation directory.
-	INSTALL_DIR = /cygdrive/c/opt
-endif
+# ifeq ($(SYSTEM),cygwin)
+# 	# Compiler.
+# 	CC = /usr/bin/gcc
+# 	CXX = "/usr/bin/g++ -std=gnu++14"
+# 	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+
+# 	# Installation directory.
+# 	INSTALL_DIR = /cygdrive/c/opt
+# endif
+
+# Architecture.
+ARCH = $(SYSTEM)_$(MACHINE)
 
 SYSTEMC = $(INSTALL_DIR)/systemc/$(ARCH)/systemc-$(SYSTEMC_VERSION)
-PREFIX = $(INSTALL_DIR)/systemc/$(ARCH)/$(PACKAGE)-$(SYSTEMC_VERSION)
-# PREFIX = $(INSTALL_DIR)/systemc/$(PACKAGE)
-# EXEC_PREFIX = $(PREFIX)/$(ARCH)
+PREFIX = $(INSTALL_DIR)/systemc/$(ARCH)/$(PACKAGE)
 
 # ==============================================================================
 
@@ -123,6 +130,8 @@ download:
 prepare:
 	-mkdir build
 	cd build && tar zxf ../src/$(PACKAGE).tar.gz
+	# We need to patch this file so that it compiles with mingw64
+	patch build/$(PACKAGE)/src/scv/scv_random.cpp src/scv_random.cpp.patch
 
 
 .PHONY: configure
