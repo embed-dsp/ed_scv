@@ -7,7 +7,6 @@ This **make** file can build the SCV library on the following systems:
 * Linux
 * Windows
     * [MSYS2](https://www.msys2.org)/mingw64
-    * [MSYS2](https://www.msys2.org)/mingw32
 
 # Get Source Code
 
@@ -51,32 +50,16 @@ make prepare
 # Configure source code.
 # NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
 sudo make configure
-
-# Configure source code for 32-bit compile on a 64-bit system.
-# NOTE: We need to use sudo here because configure script tries to create the $(PREFIX) directory!
-sudo make configure M=32
 ```
 
 ```bash
-# Compile source code using 4 simultaneous jobs (Default).
+# Compile source code using 8 simultaneous jobs (Default).
 # NOTE: We need to use sudo here because it was used for configure!
 sudo make compile
-
-# Compile source code using 2 simultaneous jobs.
-# NOTE: We need to use sudo here because it was used for configure!
-sudo make compile J=4
 ```
 
 
 # Install
-
-```bash
-# Install build products.
-sudo make install
-
-# Install 32-bit build products.
-sudo make install M=32
-```
 
 The SCV package does NOT install correctly according to the
 [GNU Coding Standards](https://www.gnu.org/prep/standards/standards.html).
@@ -84,34 +67,48 @@ The build products are therefore installed in the following locations in order
 to allow separate installation for different architectures and simple 
 interoperability with the SystemC package:
 
+## Linux
+
 ```bash
-opt/
-└── systemc/
-    ├── linux_x86_64/           # 64-bit binaries and libraries for Linux
-    │   └── scv-2.0.1/
-    │       ├── docs/           # Documentation.
-    │       │   ├── ...
-    │       │
-    │       ├── include/        # Include directory.
-    │       │   ├── scv.h
-    │       │       ...
-    │       ├── lib-linux64/    # Library directory.
-    │           ├── libscv.a
-    │               ...
-    └── linux_x86/              # 32-bit binaries and libraries for Linux
-        └── scv-2.0.1/
-            ...
+# Install build products.
+sudo make install
 ```
 
+```bash
+/opt/
+└── systemc/
+    └── linux_x86_64/           # 64-bit binaries and libraries for Linux
+        └── scv-2.0.1/
+            ├── docs/           # Documentation.
+            │   ├── ...
+            │
+            ├── include/        # Include directory.
+            │   ├── scv.h
+            │       ...
+            ├── lib-linux64/    # Library directory.
+                ├── libscv.a
+                    ...
+```
 
-# Tested System Configurations
+## Windows: MSYS2/mingw64
 
-System  | M=                | M=32  
---------|-------------------|-------------------
-linux   | Fedora-37 64-bit  | 
-mingw64 | Windows-11 64-bit |
-mingw32 | **FIXME**         |
+```bash
+# Install build products.
+make install
+```
 
-This has been testes with the following Linux distributions and compilers:
-* `Fedora-37 (64-bit)`
-    * `gcc-12.2.1`
+```bash
+/c/opt/
+└── systemc/
+    └── mingw64_x86_64/         # 64-bit binaries and libraries for Windows
+        └── scv-2.0.1/
+            ├── docs/           # Documentation.
+            │   ├── ...
+            │
+            ├── include/        # Include directory.
+            │   ├── scv.h
+            │       ...
+            ├── lib-linux64/    # Library directory.
+                ├── libscv.a
+                    ...
+```
