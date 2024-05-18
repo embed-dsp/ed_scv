@@ -18,14 +18,8 @@ SYSTEM = unknown
 ifeq ($(findstring Linux, $(shell uname -s)), Linux)
 	SYSTEM = linux
 endif
-ifeq ($(findstring MINGW32, $(shell uname -s)), MINGW32)
-	SYSTEM = mingw32
-endif
 ifeq ($(findstring MINGW64, $(shell uname -s)), MINGW64)
 	SYSTEM = mingw64
-endif
-ifeq ($(findstring CYGWIN, $(shell uname -s)), CYGWIN)
-	SYSTEM = cygwin
 endif
 
 # Determine machine.
@@ -41,55 +35,28 @@ endif
 # System configuration.
 CONFIGURE_FLAGS =
 
+# NOTE: We use this C++ compiler flag to match the one used in SystemC.
+CXXFLAGS = -std=gnu++17
+
 # Configuration for linux system.
 ifeq ($(SYSTEM),linux)
-	# Compile for 32-bit on a 64-bit machine.
-	ifeq ("$(MACHINE):$(M)","x86_64:32")
-		MACHINE = "x86"
-		CONFIGURE_FLAGS += --host=i686-linux-gnu
-	endif
-
 	# Compiler.
 	CC = /usr/bin/gcc
-	CXX = "/usr/bin/g++ -std=gnu++14"
-	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+	CXX = /usr/bin/g++
 
 	# Installation directory.
 	INSTALL_DIR = /opt
-endif
-
-# Configuration for mingw32 system.
-ifeq ($(SYSTEM),mingw32)
-	# Compiler.
-	CC = /mingw32/bin/gcc
-	CXX = "/mingw32/bin/g++ -std=gnu++14"
-	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
-
-	# Installation directory.
-	INSTALL_DIR = /c/opt
 endif
 
 # Configuration for mingw64 system.
 ifeq ($(SYSTEM),mingw64)
 	# Compiler.
 	CC = /mingw64/bin/gcc
-	CXX = "/mingw64/bin/g++ -std=gnu++14"
-	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
+	CXX = /mingw64/bin/g++
 
 	# Installation directory.
 	INSTALL_DIR = /c/opt
 endif
-
-# Configuration for cygwin system.
-# ifeq ($(SYSTEM),cygwin)
-# 	# Compiler.
-# 	CC = /usr/bin/gcc
-# 	CXX = "/usr/bin/g++ -std=gnu++14"
-# 	# NOTE: We use the -std=gnu++14 C++ compiler flag to match the one used in SystemC.
-
-# 	# Installation directory.
-# 	INSTALL_DIR = /cygdrive/c/opt
-# endif
 
 # Architecture.
 ARCH = $(SYSTEM)_$(MACHINE)
@@ -108,11 +75,11 @@ all:
 	@echo ""
 	@echo "## Build"
 	@echo "make prepare"
-	@echo "[sudo] make configure [M=32]"
+	@echo "[sudo] make configure"
 	@echo "[sudo] make compile [J=...]"
 	@echo ""
 	@echo "## Install"
-	@echo "[sudo] make install [M=32]"
+	@echo "[sudo] make install"
 	@echo ""
 	@echo "## Cleanup"
 	@echo "make clean"
@@ -136,7 +103,7 @@ prepare:
 
 .PHONY: configure
 configure:
-	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) --prefix=$(PREFIX) --disable-shared --with-systemc=$(SYSTEMC) $(CONFIGURE_FLAGS)
+	cd build/$(PACKAGE) && ./configure CC=$(CC) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) --prefix=$(PREFIX) --disable-shared --with-systemc=$(SYSTEMC) $(CONFIGURE_FLAGS)
 
 
 .PHONY: compile
